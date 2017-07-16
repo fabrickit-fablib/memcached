@@ -1,0 +1,6 @@
+node_map:
+  memcached:
+    hosts:
+      - 192.168.122.131
+    fabruns:
+      - memcached/base

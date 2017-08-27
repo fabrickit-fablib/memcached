@@ -1,7 +1,11 @@
 # coding: utf-8
 
-from fabkit import filer
+import re
+from fabkit import filer, env
 from fablib.base import SimpleBase
+
+RE_CENTOS = re.compile('CentOS .*')
+RE_UBUNTU = re.compile('Ubuntu .*')
 
 
 class Memcached(SimpleBase):
@@ -10,13 +14,19 @@ class Memcached(SimpleBase):
         self.data = {}
 
         self.services = {
-            'CentOS Linux 7.*': [
+            'CentOS .*': [
+                'memcached',
+            ],
+            'Ubuntu .*': [
                 'memcached',
             ],
         }
 
         self.packages = {
-            'CentOS Linux 7.*': [
+            'CentOS .*': [
+                'memcached',
+            ],
+            'Ubuntu .*': [
                 'memcached',
             ],
         }
@@ -28,8 +38,12 @@ class Memcached(SimpleBase):
             self.install_packages()
 
         if self.is_tag('conf'):
-            if filer.template('/etc/sysconfig/memcached', data=data):
-                self.handlers['restart_memcached'] = True
+            if RE_CENTOS.match(env.node['os']):
+                if filer.template('/etc/sysconfig/memcached', data=data):
+                    self.handlers['restart_memcached'] = True
+            elif RE_UBUNTU.match(env.node['os']):
+                if filer.template('/etc/memcached.conf', data=data, src='memcached'):
+                    self.handlers['restart_memcached'] = True
 
         if self.is_tag('service'):
             self.enable_services().start_services()

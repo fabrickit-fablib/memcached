@@ -42,7 +42,7 @@ class Memcached(SimpleBase):
                 if filer.template('/etc/sysconfig/memcached', data=data):
                     self.handlers['restart_memcached'] = True
             elif RE_UBUNTU.match(env.node['os']):
-                if filer.template('/etc/memcached.conf', data=data, src='memcached'):
+                if filer.template('/etc/memcached.conf', data=data):
                     self.handlers['restart_memcached'] = True
 
         if self.is_tag('service'):

@@ -5,5 +5,5 @@
 set -e
 flake8 --exclude=test-repo/*
 
-coverage run `which fab` test:l=mysql
+coverage run `which fab` test:l=memcached
 coverage report

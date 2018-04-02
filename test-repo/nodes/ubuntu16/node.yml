@@ -1,6 +1,6 @@
 node_map:
   memcached:
     hosts:
-      - memcached-centos7-1.example.com
+      - memcached-ubuntu16-1.example.com
     fabruns:
       - memcached/base

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from fabkit import filer
+from fabkit import filer, env
 from fablib.base import SimpleBase
 
 
@@ -13,10 +13,16 @@ class Memcached(SimpleBase):
             'CentOS Linux 7.*': [
                 'memcached',
             ],
+            'Ubuntu 16.*': [
+                'memcached'
+            ]
         }
 
         self.packages = {
             'CentOS Linux 7.*': [
+                'memcached',
+            ],
+            'Ubuntu 16.*': [
                 'memcached',
             ],
         }
@@ -25,11 +31,16 @@ class Memcached(SimpleBase):
         data = self.init()
 
         if self.is_tag('package'):
+            self.init_package_manager()
             self.install_packages()
 
         if self.is_tag('conf'):
-            if filer.template('/etc/sysconfig/memcached', data=data):
-                self.handlers['restart_memcached'] = True
+            if env.node['package_manager'] == 'apt':
+                if filer.template('/etc/memcached.conf', data=data):
+                    self.handlers['restart_memcached'] = True
+            else:
+                if filer.template('/etc/sysconfig/memcached', data=data):
+                    self.handlers['restart_memcached'] = True
 
         if self.is_tag('service'):
             self.enable_services().start_services()

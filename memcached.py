@@ -10,19 +10,19 @@ class Memcached(SimpleBase):
         self.data = {}
 
         self.services = {
-            'CentOS Linux 7.*': [
+            'CentOS .*': [
                 'memcached',
             ],
-            'Ubuntu 16.*': [
+            'Ubuntu .*': [
                 'memcached'
             ]
         }
 
         self.packages = {
-            'CentOS Linux 7.*': [
+            'CentOS .*': [
                 'memcached',
             ],
-            'Ubuntu 16.*': [
+            'Ubuntu .*': [
                 'memcached',
             ],
         }
